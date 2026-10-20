@@ -90,7 +90,7 @@ export default function Home() {
         {/* Titre Principal Ultra-Impactant */}
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white max-w-4xl mx-auto leading-[1.08] mb-6">
           Sortez vos chapitres{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5C5C] via-[#F472B6] to-[#FDA4AF] underline decoration-[#FF5C5C]/40 decoration-wavy underline-offset-8">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff5c5c] via-[#f472b6] to-[#ff5c5c]">
             3x plus vite
           </span>{" "}
           avec le studio IA dédié au scan.
