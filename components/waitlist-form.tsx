@@ -58,10 +58,10 @@ export function WaitlistForm() {
           particleCount: 100,
           spread: 80,
           origin: { y: 0.6 },
-          colors: ["#6366f1", "#a855f7", "#ec4899", "#22c55e"],
+          colors: ["#FF5C5C", "#E63946", "#F472B6", "#FF9999", "#FFFFFF"],
         });
       } catch (e) {
-        // Ignorer
+        // Ignorer si non disponible
       }
     } else {
       setServerError(res.message || "Une erreur est survenue lors de l'enregistrement.");
@@ -85,35 +85,35 @@ export function WaitlistForm() {
 
   if (successData) {
     return (
-      <div className="w-full max-w-lg mx-auto p-6 sm:p-8 rounded-3xl border border-indigo-500/40 bg-zinc-900/95 backdrop-blur-2xl shadow-2xl shadow-indigo-500/20 text-center animate-in fade-in zoom-in-95 duration-300">
-        <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto mb-4 border border-emerald-500/30 shadow-inner">
+      <div className="w-full max-w-lg mx-auto p-6 sm:p-8 rounded-3xl border border-[#FF5C5C]/40 bg-[#150E20]/95 backdrop-blur-2xl shadow-2xl shadow-[#FF5C5C]/20 text-center animate-in fade-in zoom-in-95 duration-300">
+        <div className="w-14 h-14 rounded-2xl bg-[#FF5C5C]/15 text-[#FF5C5C] flex items-center justify-center mx-auto mb-4 border border-[#FF5C5C]/30 shadow-inner">
           <CheckCircle2 className="w-7 h-7" />
         </div>
         
         <h3 className="text-2xl font-bold text-white mb-1.5 tracking-tight">
           Votre team est inscrite !
         </h3>
-        <p className="text-sm text-zinc-400 mb-6">
-          Votre accès prioritaire à la version Bêta est réservé.
+        <p className="text-sm text-zinc-300 mb-6">
+          Votre accès prioritaire à la version Bêta de Taurge est réservé.
         </p>
 
         {/* Badge position */}
-        <div className="p-4 rounded-2xl bg-gradient-to-b from-zinc-950 to-zinc-900 border border-zinc-800 mb-6 inline-flex flex-col items-center min-w-[200px]">
-          <span className="text-[11px] uppercase tracking-widest text-zinc-400 font-semibold mb-1">
+        <div className="p-4 rounded-2xl bg-gradient-to-b from-[#1E142E] to-[#120B1D] border border-white/10 mb-6 inline-flex flex-col items-center min-w-[200px]">
+          <span className="text-[11px] uppercase tracking-widest text-[#FF7A7A] font-semibold mb-1">
             Position dans la file
           </span>
-          <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-indigo-200">
+          <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#FF5C5C] via-[#F472B6] to-[#FDA4AF]">
             #{successData.position}
           </span>
         </div>
 
-        <div className="bg-zinc-950/70 border border-zinc-800/80 rounded-2xl p-4 mb-5 text-left">
+        <div className="bg-[#0D0816]/80 border border-white/10 rounded-2xl p-4 mb-5 text-left">
           <div className="flex items-center gap-2 mb-2 text-xs font-semibold text-zinc-300">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-            Remontez dans la liste avec votre lien :
+            <Sparkles className="w-3.5 h-3.5 text-[#FF5C5C]" />
+            Remontez dans la liste avec votre lien exclusif :
           </div>
           <div className="flex items-center gap-2">
-            <div className="truncate text-xs font-mono bg-zinc-900 border border-zinc-800 px-3 py-2.5 rounded-xl text-zinc-300 flex-1 select-all">
+            <div className="truncate text-xs font-mono bg-[#160E22] border border-white/10 px-3 py-2.5 rounded-xl text-zinc-200 flex-1 select-all">
               {getShareUrl()}
             </div>
             <Button
@@ -121,10 +121,10 @@ export function WaitlistForm() {
               variant="outline"
               size="sm"
               onClick={handleCopy}
-              className="shrink-0 h-10 px-3.5 rounded-xl"
+              className="shrink-0 h-10 px-3.5 rounded-xl border-[#FF5C5C]/30 text-white hover:border-[#FF5C5C]"
             >
               {copied ? (
-                <span className="flex items-center gap-1 text-emerald-400 font-medium text-xs">
+                <span className="flex items-center gap-1 text-[#FF5C5C] font-semibold text-xs">
                   <Check className="w-3.5 h-3.5" /> Copié
                 </span>
               ) : (
@@ -152,12 +152,12 @@ export function WaitlistForm() {
   return (
     <div className="w-full max-w-xl mx-auto">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5">
-        <div className="flex flex-col sm:flex-row gap-3 p-1.5 rounded-2xl bg-zinc-900/60 border border-zinc-800/90 shadow-2xl backdrop-blur-xl">
+        <div className="flex flex-col sm:flex-row gap-2.5 p-1.5 rounded-2xl bg-[#181024]/80 border border-white/[0.12] shadow-2xl backdrop-blur-xl">
           <div className="relative flex-1">
             <Input
               {...register("email")}
               type="email"
-              placeholder="votre.email@domaine.com"
+              placeholder="votre.email@scanlation.org"
               disabled={loading}
               className={errors.email ? "border-rose-500 focus:ring-rose-500/30" : ""}
             />
@@ -165,7 +165,7 @@ export function WaitlistForm() {
           <Button
             type="submit"
             disabled={loading}
-            className="h-12 px-6 text-sm font-semibold shrink-0 group shadow-md"
+            className="h-12 px-6 text-sm font-semibold shrink-0 group shadow-lg shadow-[#FF5C5C]/25 text-white"
           >
             {loading ? (
               <>
@@ -174,8 +174,8 @@ export function WaitlistForm() {
               </>
             ) : (
               <>
-                <span>Boostez votre team de scan</span>
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                <span>Rejoindre la waitlist</span>
+                <span className="ml-1.5 font-bold text-base group-hover:translate-x-1 transition-transform inline-block">→</span>
               </>
             )}
           </Button>
@@ -194,8 +194,8 @@ export function WaitlistForm() {
         )}
 
         <div className="flex items-center justify-center gap-2 text-xs text-zinc-400 pt-1">
-          <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-          <span>Zéro spam. Accès prioritaire garanti pour les 100 premières teams.</span>
+          <ShieldCheck className="w-4 h-4 text-[#FF5C5C] shrink-0" />
+          <span>Accès prioritaire garanti pour les 100 premières teams. Zéro spam.</span>
         </div>
       </form>
     </div>

@@ -10,16 +10,16 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "default", size = "default", ...props }, ref) => {
     const baseStyles =
-      "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:pointer-events-none disabled:opacity-50 cursor-pointer active:scale-[0.98]";
+      "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C5C] disabled:pointer-events-none disabled:opacity-50 cursor-pointer active:scale-[0.98]";
     
     const variants = {
       default:
-        "bg-gradient-to-r from-indigo-500 via-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:brightness-110 border border-indigo-400/30",
+        "bg-gradient-to-r from-[#FF5C5C] via-[#FF4D4D] to-[#E63946] text-white shadow-lg shadow-[#FF5C5C]/25 hover:shadow-[#FF5C5C]/40 hover:brightness-105 border border-[#FF7A7A]/40",
       outline:
-        "border border-zinc-700/80 bg-zinc-900/60 text-zinc-100 hover:bg-zinc-800 hover:text-white backdrop-blur-sm",
+        "border border-white/10 bg-white/[0.04] text-zinc-100 hover:bg-white/[0.08] hover:border-[#FF5C5C]/40 backdrop-blur-sm",
       secondary:
         "bg-zinc-800/80 text-zinc-100 hover:bg-zinc-700 hover:text-white border border-zinc-700/50",
-      ghost: "hover:bg-zinc-800/60 text-zinc-300 hover:text-white",
+      ghost: "hover:bg-white/[0.06] text-zinc-300 hover:text-white",
     };
 
     const sizes = {
