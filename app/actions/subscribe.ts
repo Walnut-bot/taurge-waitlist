@@ -12,8 +12,14 @@ export type SubscribeState = {
   success: boolean;
   message?: string;
   position?: number;
+  basePosition?: number;
+  referralCount?: number;
   referralCode?: string;
+  isReturningUser?: boolean;
 };
+
+// Bonus : chaque filleul fait remonter de 5 places dans la file d'attente
+const PLACES_PER_REFERRAL = 5;
 
 export async function subscribeToWaitlist(
   formData: { email: string; referralCode?: string }
@@ -29,12 +35,15 @@ export async function subscribeToWaitlist(
 
   const { email, referralCode } = parse.data;
 
-  // Sécurité si les clés ne sont pas encore définies
+  // Mode secours si Supabase n'est pas branché
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return {
       success: true,
       position: 142,
+      basePosition: 142,
+      referralCount: 0,
       referralCode: "TAURGE-" + Math.random().toString(36).substring(2, 8).toUpperCase(),
+      isReturningUser: false,
     };
   }
 
@@ -49,27 +58,44 @@ export async function subscribeToWaitlist(
       .maybeSingle();
 
     if (existingUser) {
-      const { count } = await supabase
+      // Calculer sa position brute d'arrivée (basePosition)
+      const { count: baseCount } = await supabase
         .from("waitlist")
         .select("*", { count: "exact", head: true })
         .lte("created_at", existingUser.created_at);
 
+      // Calculer le nombre réel de personnes qu'il a parrainées
+      const { count: refCount } = await supabase
+        .from("waitlist")
+        .select("*", { count: "exact", head: true })
+        .eq("referred_by", existingUser.referral_code);
+
+      const basePosition = baseCount || 1;
+      const referrals = refCount || 0;
+      // Recalcul du rang effectif (avec un minimum à 1)
+      const effectivePosition = Math.max(1, basePosition - (referrals * PLACES_PER_REFERRAL));
+
       return {
         success: true,
-        message: "Vous êtes déjà inscrit !",
-        position: count || 1,
+        message: referrals > 0 
+          ? `Bon retour ! Vous avez parrainé ${referrals} ${referrals > 1 ? 'membres' : 'membre'} et gagné ${referrals * PLACES_PER_REFERRAL} places !`
+          : "Bon retour ! Partagez votre lien ci-dessous pour remonter dans la file d'attente.",
+        position: effectivePosition,
+        basePosition: basePosition,
+        referralCount: referrals,
         referralCode: existingUser.referral_code,
+        isReturningUser: true,
       };
     }
 
-    // 2. Générer un code de parrainage unique
+    // 2. Générer un code de parrainage unique pour le nouveau membre
     const newReferralCode = "TG-" + Math.random().toString(36).substring(2, 7).toUpperCase();
 
-    // 3. Insérer dans la table waitlist
+    // 3. Insérer le nouveau membre dans Supabase
     const { error: insertError } = await supabase.from("waitlist").insert({
       email,
       referral_code: newReferralCode,
-      referred_by: referralCode || null,
+      referred_by: referralCode ? referralCode.trim().toUpperCase() : null,
     });
 
     if (insertError) {
@@ -77,15 +103,20 @@ export async function subscribeToWaitlist(
       return { success: false, message: "Une erreur est survenue lors de l'enregistrement." };
     }
 
-    // 4. Récupérer le nombre total d'inscrits pour donner la position
+    // 4. Position totale du nouvel arrivant
     const { count: totalCount } = await supabase
       .from("waitlist")
       .select("*", { count: "exact", head: true });
 
+    const position = totalCount || 1;
+
     return {
       success: true,
-      position: totalCount || 1,
+      position: position,
+      basePosition: position,
+      referralCount: 0,
       referralCode: newReferralCode,
+      isReturningUser: false,
     };
   } catch (err) {
     console.error("Erreur serveur subscribeToWaitlist :", err);
